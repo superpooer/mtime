@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <time.h>
 /*
  *     ***
  *    *   *
@@ -77,8 +78,14 @@ void writeclock(int isHour, int ang){
 	}
 }
 
+char needpad(int in){
+	if(in < 10)
+		return ' ';
+	else return 0;
+}
+
 void printclock(Time *t){
-	printf("\n  %i:%i", t->hour, t->min);
+	printf("\n %c%i:%i", needpad(t->hour), t->hour, t->min);
 	printf("\n%s", toprow);
 	printf("\n%s", secrow);
 	printf("\n%s", thirdrow);
@@ -96,13 +103,16 @@ int hourto12(int in){
 	return (in > 12) ? in-12 : in;
 }
 
-//DEBUG
 void readtime(Time *t){
-	t->hour = 1;
-	t->min = 23;
-	t->sec = 17;
+	time_t rawtime;
+	struct tm * timef;
+	time(&rawtime);
+	timef = localtime(&rawtime);
+
+	t->hour = timef->tm_hour;
+	t->min  = timef->tm_min;
+	t->sec  = timef->tm_sec;
 }
-//DEBUG
 
 int main(int argc, char **argv){
 	Time t;
