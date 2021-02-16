@@ -1,13 +1,7 @@
 #include <stdio.h>
 #include <time.h>
-/*
- *     ***
- *    *   *
- *    h   m   48wide for big
- *    *   *
- *     ***
- *     get tclock.c from ncurses4.2/test/
- */
+
+char bigclock[50][25];
 
 typedef struct{
 	int hour;
@@ -78,14 +72,14 @@ void writeclock(int isHour, int ang){
 	}
 }
 
-char needpad(int in){
+char needpad(int in, char pad){
 	if(in < 10)
-		return ' ';
+		return pad;
 	else return 0;
 }
 
 void printclock(Time *t){
-	printf("\n %c%i:%i", needpad(t->hour), t->hour, t->min);
+	printf("\n %c%i:%c%i", needpad(t->hour, ' '), t->hour, needpad(t->min, '0'), t->min);
 	printf("\n%s", toprow);
 	printf("\n%s", secrow);
 	printf("\n%s", thirdrow);
@@ -115,12 +109,42 @@ void readtime(Time *t){
 }
 
 int main(int argc, char **argv){
+	init();
 	Time t;
 	readtime(&t);
-	//writeclock(1, tweakhour(t.hour, t.min)); //1 min accuracy version
-	//writeclock(0, to5mac(t.min)); //1 min accuracy version
-	writeclock(1, hourto12(t.hour)); //5 min accuracy version
-	writeclock(0, minto12(t.min)); //5 min accuracy version
+	writeclock(1, hourto12(t.hour));
+	writeclock(0, minto12(t.min));
 	printclock(&t);
 	return 0;
 }
+
+
+
+
+/*
+**************************************************
+*                                                *
+*                                                *
+*                                                *
+*                                                *
+*                                                *
+*                                                *
+*                                                *
+*                                                *
+*                                                *
+*                                                *
+*                                                *
+*                       o                        *
+*                                                *
+*                                                *
+*                                                *
+*                                                *
+*                                                *
+*                                                *
+*                                                *
+*                                                *
+*                                                *
+*                                                *
+*                                                *
+**************************************************
+*/
