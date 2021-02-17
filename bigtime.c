@@ -11,15 +11,14 @@
 #include "hdtime.h"
 
 
-char bigclock[50][25];
+char bigclock[50][26];
 
 int main(int argc, char **argv){
-	printf("\n\n\n       sponge!\n\n");
-	//init();
-	//struct Time tm;
-	//readtime(&tm);
-	//settime(tm);
-	//drawclock();
+	init();
+	struct Time tm;
+	readtime(&tm);
+	settime(tm);
+	drawclock();
 	return 0;
 }
 
@@ -70,31 +69,32 @@ void drawclock(){
 	}
 }
 
+double abs(double d){
+	if(d > 0)
+		return d;
+	else return d*-1;
+}
 
 void settime(struct Time tm){
-//	int mindeg = tm.min*6;
-//	int hourdeg = tm.hour*30 + tm.min/2;
-//	double xoff_m = round(sin(p2r*mindeg));
-//	double yoff_m = round(cos(p2r*mindeg));
-//	double xoff_h = round(sin(p2r*hourdeg));
-//	double yoff_h = round(cos(p2r*hourdeg));
-//	printf("\n%i:%i\n", tm.hour, tm.min);
-//	printf("\nxoff_m = %f", xoff_m);
-//	printf("\nyoff_m = %f", yoff_m);
-//	printf("\nxoff_h = %f", xoff_h);
-//	printf("\nyoff_h = %f", yoff_h);
-//	for(int i = 0; i <= 20; ++i){
-//		int abshx = (int)(xoff_h*i);
-//		int abshy = (int)(yoff_h*i);
-//		int absmx = (int)(xoff_m*i);
-//		int absmy = (int)(yoff_m*i);
-//		int hxplot = OG_X+abshx;
-//		int hyplot = OG_Y-abshy;
-//		int mxplot = OG_X+absmx;
-//		int myplot = OG_Y-absmy;
-//		if(!(sqrt(pow(abshx, 2) + pow(abshy, 2)) >= 8))
-//			bigclock[hxplot][hyplot] = 'H';
-//		if(!(sqrt(pow(absmx, 2) + pow(absmy, 2)) >= 10))
-//			bigclock[mxplot][myplot] = 'M';
-//	}
+	double minrad = ((double)(tm.min*6)) * d2r;
+	double hourrad = ((double)(tm.hour*30)) * d2r;
+	double mino = (double)tm.min;
+	mino *= d2r;
+	mino /= 2;
+	hourrad += mino;
+	double hs, hc, hts, htc, ms, mc, mts, mtc;
+	hs = sin(hourrad);
+	hc = cos(hourrad);
+	ms = sin(minrad);
+	mc = cos(minrad);
+	for(int p = 0; p <= 20; ++p){			//mins
+		mts = ms * p;
+		mtc = mc * p/2;
+		bigclock[OG_X+(int)mts][OG_Y-(int)mtc] = 'M'; // y goes top to bottom
+	}
+	for(int p = 0; p <= 16; ++p){			//hours
+		hts = hs * p;
+		htc = hc * p/2;
+		bigclock[OG_X+(int)hts][OG_Y-(int)htc] = 'H'; // y goes top to bottom
+	}
 }
