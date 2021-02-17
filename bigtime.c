@@ -18,6 +18,7 @@ int main(int argc, char **argv){
 	struct Time tm;
 	readtime(&tm);
 	settime(tm);
+	fancify();
 	drawclock();
 	return 0;
 }
@@ -30,7 +31,6 @@ void init(){
 				bigclock[x][y] = C_BORDER;
 		}
 	}
-	bigclock[(int)WIDTH/2][(int)HEIGHT/2] = C_ORIGIN;
 	spawnnumbers();
 }
 
@@ -73,6 +73,10 @@ double abs(double d){
 	if(d > 0)
 		return d;
 	else return d*-1;
+}
+
+void fancify(){
+	bigclock[(int)WIDTH/2][(int)HEIGHT/2] = C_ORIGIN;
 }
 
 void settime(struct Time tm){

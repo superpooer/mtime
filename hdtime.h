@@ -29,4 +29,6 @@ void spawnnumbers();
 void readtime(struct Time *t);
 void drawnumbers();
 void settime(struct Time tm);
+void fancify();
+
 double abs(double d);
