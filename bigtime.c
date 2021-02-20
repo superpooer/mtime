@@ -116,10 +116,8 @@ void settime(struct Time tm){
 }
 
 int decipheroffset(struct Time *time, char *s){
-	printf("in decipherinput s is = %s\n", s);
 	int i = 0, pos = 0, neg = 0; //pos 0 = hour, 1 = min, 2 = sec, >2 || <0 = err
 	while(1){
-		printf("in while i is %i pos is %i s is %s\n", i, pos, s);
 		switch(s[i]){
 			case '+': case '0':
 				++i;
@@ -144,18 +142,14 @@ int decipheroffset(struct Time *time, char *s){
 							time->hour *= 10;
 						break;
 					case 1:
-						printf("before add time.min is %i\n", time->min);
 						time->min += (s[i] - CVT_ASC2INT);
 						if((s[i+1] != 0) && (s[i+1] != ':'))
 							time->min *= 10;
-						printf("after add time.min is %i\n", time->min);
 						break;
 					case 2:
-						printf("before add time.sec is %i\n", time->sec);
 						time->sec += (s[i] - CVT_ASC2INT);
 						if(s[i+1] != 0)
 							time->sec *= 10;
-						printf("after add time.sec is %i\n", time->sec);
 						break;
 					default:
 						return 2;
@@ -175,7 +169,6 @@ end:
 			time->min *= -1;
 			time->sec *= -1;
 		}
-	printf("found EOL, returning\n");
 	return 0;
 }
 
