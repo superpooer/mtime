@@ -4,8 +4,7 @@
  * we wont bother with non-12 hour clocks yet
  *
  * todo:
- * make border faint (escape code)
- * generalise for any clock size
+ * make border faint and add colours with escape codes
  *
 */
 #include "hdtime.h"
@@ -62,20 +61,22 @@ void readtime(struct Time *t){
 	t->sec  = timef->tm_sec;
 }
 
-void spawnnumbers(){
-	bigclock[WIDTH-3][OG_Y]   = '3';
-	bigclock[OG_X][HEIGHT-2]  = '6';
-	bigclock[3][OG_Y]         = '9';
-	bigclock[OG_X][2]         = 'C';
+char i2cc(int i){
+	return (i > 9) ? i+55 : i+48;
+}
 
-	bigclock[OG_X+11][OG_Y-9] = '1';
-	bigclock[OG_X+18][OG_Y-5] = '2';
-	bigclock[OG_X+18][OG_Y+5] = '4';
-	bigclock[OG_X+11][OG_Y+9] = '5';
-	bigclock[OG_X-11][OG_Y+9] = '7';
-	bigclock[OG_X-18][OG_Y+5] = '8';
-	bigclock[OG_X-18][OG_Y-5] = 'A';
-	bigclock[OG_X-11][OG_Y-9] = 'B';
+void spawnnumbers(){
+	double id, sid, cid;
+	for(int i = 1; i <= 12; ++i){
+		id = (double)i;
+		id *= (360/12);
+		id *= d2r;
+		sid = sin(id);
+		cid = cos(id);
+		sid *= MARKER_RAD_X;
+		cid *= MARKER_RAD_Y;
+		bigclock[OG_X+(int)sid][OG_Y-(int)cid] = i2cc(i); // y goes top to bottom
+	}
 }
 
 void drawclock(){
@@ -103,15 +104,15 @@ void settime(struct Time tm){
 	hc = cos(hourrad);
 	ms = sin(minrad);
 	mc = cos(minrad);
-	for(int p = 0; p <= 20; ++p){			//mins
+	for(int p = 0; p <= MIN_LEN; ++p){			//mins
 		mts = ms * p;
 		mtc = mc * p/2;
-		bigclock[OG_X+(int)mts][OG_Y-(int)mtc] = 'M'; // y goes top to bottom
+		bigclock[OG_X+(int)mts][OG_Y-(int)mtc] = C_MINHAND; // y goes top to bottom
 	}
-	for(int p = 0; p <= 16; ++p){			//hours
+	for(int p = 0; p <= HOUR_LEN; ++p){			//hours
 		hts = hs * p;
 		htc = hc * p/2;
-		bigclock[OG_X+(int)hts][OG_Y-(int)htc] = 'H'; // y goes top to bottom
+		bigclock[OG_X+(int)hts][OG_Y-(int)htc] = C_HOURHAND; // y goes top to bottom
 	}
 }
 
@@ -137,17 +138,17 @@ int decipheroffset(struct Time *time, char *s){
 			case '9':
 				switch(pos){
 					case 0:
-						time->hour += (s[i] - CVT_ASC2INT);
+						time->hour += (s[i] - 48);
 						if((s[i+1] != 0) && (s[i+1] != ':'))
 							time->hour *= 10;
 						break;
 					case 1:
-						time->min += (s[i] - CVT_ASC2INT);
+						time->min += (s[i] - 48);
 						if((s[i+1] != 0) && (s[i+1] != ':'))
 							time->min *= 10;
 						break;
 					case 2:
-						time->sec += (s[i] - CVT_ASC2INT);
+						time->sec += (s[i] - 48);
 						if(s[i+1] != 0)
 							time->sec *= 10;
 						break;

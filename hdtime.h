@@ -5,13 +5,17 @@
 
 const char C_BORDER = '*';
 const char C_ORIGIN = 'o';
-const char C_HOURHAND = 'H';
-const char C_MINHAND = 'M';
+const char C_HOURHAND = '.';
+const char C_MINHAND = '#';
 
 const int HEIGHT = 26;  //characters are 8x16
 const int WIDTH = 50;	  //ie have width be 2*height
 const int OG_Y = 13;    //math.floor(HEIGHT/2) (zero-indexed)
 const int OG_X = 25;    //math.floor(WIDTH/2) (zero-indexed)
+const int MARKER_RAD_X = 22; //(HEIGHT/2) - 3
+const int MARKER_RAD_Y = 11; //(WIDTH/2) - 2
+const int MIN_LEN = 20;  //MARKER_RAD_Y * 9/10   hand lengths
+const int HOUR_LEN = 16; //MARKER_RAD_Y * 2/3   hand lengths
 
 const int CVT_ASC2INT = 48;
 
